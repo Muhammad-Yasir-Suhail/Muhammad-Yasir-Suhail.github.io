@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Yasir Suhail — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0F1115;
+    --panel: #171B22;
+    --panel-alt: #1E232C;
+    --line: #2A303C;
+    --text: #ECE9E0;
+    --muted: #8A93A6;
+    --amber: #E8A33D;
+    --teal: #4FD1C5;
+    --red: #E2574C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--amber); color:#0F1115; }
+
+  .scanlines{
+    position:fixed; inset:0; pointer-events:none; z-index:50;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.018) 0px,
+      rgba(255,255,255,0.018) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode:overlay;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  .mono{ font-family:'JetBrains Mono', monospace; }
+  .display{ font-family:'Space Grotesk', sans-serif; }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; }
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:40;
+    background:rgba(15,17,21,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .nav-brand{ font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:0.05em; color:var(--amber); }
+  .nav-brand span{ color:var(--muted); }
+  .nav-links{ display:flex; gap:28px; list-style:none; }
+  .nav-links a{
+    font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--muted); transition:color .2s;
+    position:relative; padding-bottom:4px;
+  }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--amber); transition:width .25s;
+  }
+  .nav-links a:hover::after{ width:100%; }
+  @media (max-width:640px){ .nav-links{ display:none; } }
+
+  /* HERO */
+  header.hero{
+    min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+    position:relative; padding-top:64px;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 10%, rgba(79,209,197,0.08), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 90%, rgba(232,163,61,0.07), transparent 60%);
+  }
+  .boot-card{
+    border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:6px;
+    padding:22px 26px;
+    max-width:560px;
+    box-shadow:0 0 0 1px rgba(0,0,0,0.2), 0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .boot-dots{ display:flex; gap:6px; margin-bottom:16px; }
+  .boot-dots span{ width:9px; height:9px; border-radius:50%; background:var(--line); }
+  .boot-dots span:nth-child(1){ background:var(--red); }
+  .boot-dots span:nth-child(2){ background:var(--amber); }
+  .boot-dots span:nth-child(3){ background:var(--teal); }
+  .boot-line{ font-family:'JetBrains Mono', monospace; font-size:12.5px; color:var(--muted); margin-bottom:3px; }
+  .boot-line b{ color:var(--teal); font-weight:500; }
+  .type-cursor::after{
+    content:'█'; color:var(--amber); animation:blink 1s step-end infinite; margin-left:2px;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .hero-name{
+    font-family:'Space Grotesk', sans-serif; font-weight:700;
+    font-size:clamp(38px, 7vw, 72px); line-height:1.02; margin-top:26px;
+    letter-spacing:-0.01em;
+  }
+  .hero-name .accent{ color:var(--amber); }
+  .hero-role{
+    font-family:'JetBrains Mono', monospace; color:var(--teal); font-size:15px;
+    margin-top:14px; letter-spacing:0.03em;
+  }
+  .hero-desc{ max-width:560px; color:var(--muted); margin-top:16px; font-size:15.5px; }
+
+  .stat-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+  .stat-chip{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--text);
+    border:1px solid var(--line); background:var(--panel);
+    padding:8px 14px; border-radius:5px; display:flex; gap:8px; align-items:center;
+  }
+  .stat-chip .k{ color:var(--muted); }
+  .stat-chip:hover{ border-color:var(--amber); }
+  .stat-chip a{ transition:color .2s; }
+  .stat-chip a:hover{ color:var(--amber); }
+
+  .hero-scroll{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    letter-spacing:0.1em;
+  }
+  .hero-scroll .bar{ width:1px; height:28px; background:linear-gradient(var(--muted), transparent); animation:pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:0.3; } 50%{ opacity:1; } }
+
+  /* SECTION shared */
+  section{ padding:100px 0; border-top:1px solid var(--line); }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--amber);
+    letter-spacing:0.12em; text-transform:uppercase; margin-bottom:10px; display:block;
+  }
+  .sec-title{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(26px,4vw,38px); margin-bottom:12px; }
+  .sec-intro{ color:var(--muted); max-width:620px; margin-bottom:48px; font-size:15px; }
+
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* EDUCATION */
+  .timeline{ position:relative; padding-left:26px; }
+  .timeline::before{ content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1px; background:var(--line); }
+  .tl-item{ position:relative; padding-bottom:34px; }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{
+    content:''; position:absolute; left:-26px; top:4px; width:11px; height:11px;
+    border-radius:50%; background:var(--bg); border:2px solid var(--teal);
+  }
+  .tl-year{ font-family:'JetBrains Mono', monospace; color:var(--teal); font-size:12px; letter-spacing:0.05em; }
+  .tl-school{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:19px; margin-top:4px; }
+  .tl-detail{ color:var(--muted); font-size:14px; margin-top:5px; max-width:600px; }
+
+  /* PROJECTS */
+  .filters{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:34px; }
+  .filter-btn{
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; letter-spacing:0.05em;
+    text-transform:uppercase; padding:8px 14px; border-radius:5px; border:1px solid var(--line);
+    background:transparent; color:var(--muted); cursor:pointer; transition:all .2s;
+  }
+  .filter-btn:hover{ color:var(--text); border-color:var(--muted); }
+  .filter-btn.active{ background:var(--amber); color:#0F1115; border-color:var(--amber); font-weight:700; }
+
+  .proj-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; }
+  @media (max-width:900px){ .proj-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:640px){ .proj-grid{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:7px;
+    padding:20px 18px 18px; position:relative; overflow:hidden;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+    display:flex; flex-direction:column; min-height:210px;
+  }
+  .card::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:var(--edge, var(--amber));
+  }
+  .card:hover{ transform:translateY(-4px); border-color:var(--edge, var(--amber)); box-shadow:0 16px 32px -18px rgba(0,0,0,0.7); }
+  .card.hide{ display:none; }
+  .card-slot{ font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--muted); letter-spacing:0.08em; margin-bottom:10px; }
+  .card-title{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:17px; margin-bottom:8px; }
+  .card-desc{ color:var(--muted); font-size:13.3px; flex-grow:1; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+  .tag{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--text);
+    background:var(--panel-alt); border:1px solid var(--line); padding:3px 8px; border-radius:4px;
+  }
+
+  /* SKILLS */
+  .skill-groups{ display:grid; grid-template-columns:repeat(2,1fr); gap:28px; }
+  @media (max-width:700px){ .skill-groups{ grid-template-columns:1fr; } }
+  .skill-group h4{
+    font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--teal);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:14px;
+  }
+  .pill-row{ display:flex; flex-wrap:wrap; gap:8px; }
+  .pill{
+    font-size:13px; padding:7px 13px; border-radius:20px; border:1px solid var(--line);
+    background:var(--panel); color:var(--text); transition:border-color .2s, color .2s;
+  }
+  .pill:hover{ border-color:var(--amber); color:var(--amber); }
+
+  /* ACTIVITIES */
+  .act-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  @media (max-width:700px){ .act-grid{ grid-template-columns:1fr; } }
+  .act-card{ background:var(--panel); border:1px solid var(--line); border-radius:7px; padding:22px; }
+  .act-card .eyebrow{ margin-bottom:8px; }
+  .act-card p{ color:var(--muted); font-size:14px; }
+  .act-card strong{ color:var(--text); }
+
+  /* CONTACT / FOOTER */
+  footer{ padding:90px 0 40px; border-top:1px solid var(--line); }
+  .contact-title{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(28px,5vw,46px); margin-bottom:18px; }
+  .contact-links{ display:flex; flex-wrap:wrap; gap:14px; margin-top:26px; margin-bottom:70px; }
+  .contact-links a{
+    font-family:'JetBrains Mono', monospace; font-size:13px; border:1px solid var(--line);
+    padding:12px 20px; border-radius:6px; transition:all .2s; display:inline-flex; align-items:center; gap:8px;
+  }
+  .contact-links a:hover{ border-color:var(--amber); color:var(--amber); transform:translateY(-2px); }
+  .foot-bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; color:var(--muted); font-size:12px; font-family:'JetBrains Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-brand">YASIR<span>.exe</span></div>
+    <ul class="nav-links">
+      <li><a href="#education">Education</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="boot-card">
+      <div class="boot-dots"><span></span><span></span><span></span></div>
+      <div class="boot-line">$ whoami</div>
+      <div class="boot-line" id="typedLine">&nbsp;</div>
+      <div class="boot-line"><b>STATUS</b> — Computer Science student, class of 2027</div>
+      <div class="boot-line"><b>BASE</b> — Rawalpindi, Pakistan</div>
+    </div>
+
+    <h1 class="hero-name">Muhammad Yasir<br><span class="accent">Suhail</span></h1>
+    <div class="hero-role">Game Developer · Systems Programmer · Builder of Things That Run</div>
+    <p class="hero-desc">
+      I build playable systems from the register up — multiplayer games that model real OS behaviour,
+      tower-defense clones, x86 game loops, and the occasional NLP pipeline when I need a break from segfaults.
+    </p>
+
+    <div class="stat-row">
+      <div class="stat-chip"><span class="k">tel</span> +92 325 1001343</div>
+      <div class="stat-chip"><a href="https://github.com/Muhammad-Yasir-Suhail" target="_blank" rel="noopener">github ↗</a></div>
+      <div class="stat-chip"><a href="https://www.linkedin.com/in/muhammad-yasir-suhail804146407/" target="_blank" rel="noopener">linkedin ↗</a></div>
+    </div>
+  </div>
+
+  <div class="hero-scroll"><span>SCROLL</span><div class="bar"></div></div>
+</header>
+
+<section id="education">
+  <div class="wrap reveal">
+    <span class="eyebrow">Save File</span>
+    <h2 class="sec-title">Education</h2>
+    <p class="sec-intro">Four years of coursework, three schools, one recurring theme: figuring out how things work underneath.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">2023 — 2027</div>
+        <div class="tl-school">FAST — National University of Computer and Emerging Sciences, Islamabad</div>
+        <div class="tl-detail">B.S. Computer Science. Coursework in Programming Fundamentals, Data Structures &amp; Algorithms, OOP, Database Systems, Operating Systems, Computer Networks, Software Engineering, and Artificial Intelligence.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021 — 2023</div>
+        <div class="tl-school">Punjab College, Rawalpindi</div>
+        <div class="tl-detail">F.Sc — Physics, Chemistry, Mathematics.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-school">Siddeeq Public School, 6th Road, Rawalpindi</div>
+        <div class="tl-detail">Matriculation — Physics, Chemistry, Computer Science, Mathematics.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap reveal">
+    <span class="eyebrow">Cartridge Library</span>
+    <h2 class="sec-title">Projects</h2>
+    <p class="sec-intro">Eleven builds spanning game engines, an OS simulated in a Docker container, x86 assembly, and one NLP pipeline that graduated me from games for a semester.</p>
+
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="game">Games</button>
+      <button class="filter-btn" data-filter="systems">Systems</button>
+      <button class="filter-btn" data-filter="web">Web &amp; AI</button>
+      <button class="filter-btn" data-filter="desktop">Desktop</button>
+    </div>
+
+    <div class="proj-grid" id="projGrid">
+
+      <div class="card" data-cat="systems game" style="--edge:#E2574C">
+        <div class="card-slot">CARTRIDGE 01 · SYSTEMS</div>
+        <div class="card-title">Chrono Rift</div>
+        <div class="card-desc">OS-concept multiplayer game running inside a Docker container. Multithreading, mutex/semaphore synchronization, deadlock prevention, and fork()/exec() process management sit underneath three CPU scheduling algorithms — all driving live gameplay.</div>
+        <div class="tag-row"><span class="tag">C++</span><span class="tag">SFML</span><span class="tag">Docker</span><span class="tag">Linux</span></div>
+      </div>
+
+      <div class="card" data-cat="web" style="--edge:#4FD1C5">
+        <div class="card-slot">CARTRIDGE 02 · AI / NLP</div>
+        <div class="card-title">QuizGenAI</div>
+        <div class="card-desc">End-to-end NLP pipeline that turns articles into multiple-choice quizzes. Scikit-learn models handle context-aware distractor generation, wrapped in a Streamlit app with Matplotlib/Seaborn metric visualizations.</div>
+        <div class="tag-row"><span class="tag">Python</span><span class="tag">NLP</span><span class="tag">Scikit-learn</span><span class="tag">Streamlit</span></div>
+      </div>
+
+      <div class="card" data-cat="web" style="--edge:#4FD1C5">
+        <div class="card-slot">CARTRIDGE 03 · WEB</div>
+        <div class="card-title">Hospital Management Web System</div>
+        <div class="card-desc">Full-stack platform built from ER/EER modeling up, handling 15+ entity types. Normalized relational schema, CRUD, joins, stored procedures, report generation, and an admin dashboard with search/filter and validation.</div>
+        <div class="tag-row"><span class="tag">PHP</span><span class="tag">SQL Server</span><span class="tag">HTML/CSS/JS</span></div>
+      </div>
+
+      <div class="card" data-cat="game" style="--edge:#E8A33D">
+        <div class="card-slot">CARTRIDGE 04 · GAME</div>
+        <div class="card-title">Plants vs Zombies Clone</div>
+        <div class="card-desc">A complete 2D tower-defense recreation with a modular OOP codebase — grid-based plant placement, zombie wave spawning, projectile collision, and health/damage mechanics.</div>
+        <div class="tag-row"><span class="tag">C++</span><span class="tag">SFML</span><span class="tag">OOP</span></div>
+      </div>
+
+      <div class="card" data-cat="game" style="--edge:#E8A33D">
+        <div class="card-slot">CARTRIDGE 05 · GAME</div>
+        <div class="card-title">The Silent Attack — 3D FPS</div>
+        <div class="card-desc">Fully playable 3D shooter with smooth movement, camera control, enemy AI, weapon shooting, muzzle flash and bullet-hole effects across a multi-level architecture.</div>
+        <div class="tag-row"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">Git</span></div>
+      </div>
+
+      <div class="card" data-cat="systems game" style="--edge:#E2574C">
+        <div class="card-slot">CARTRIDGE 06 · SYSTEMS</div>
+        <div class="card-title">Zuma Deluxe Clone</div>
+        <div class="card-desc">The full Zuma game loop rebuilt in x86 Assembly at the hardware instruction level — real-time ball movement, colour-matching collision, and chain-reaction logic run entirely through CPU registers.</div>
+        <div class="tag-row"><span class="tag">x86 Assembly</span><span class="tag">Irvine32</span></div>
+      </div>
+
+      <div class="card" data-cat="desktop" style="--edge:#8A93A6">
+        <div class="card-slot">CARTRIDGE 07 · DESKTOP</div>
+        <div class="card-title">Hospital Management System</div>
+        <div class="card-desc">Desktop GUI for patient registration, doctor/staff management, appointment scheduling, and payment records, built with OOP and event-handling patterns over a persistent SQL Server backend.</div>
+        <div class="tag-row"><span class="tag">Java</span><span class="tag">Swing</span><span class="tag">SQL Server</span></div>
+      </div>
+
+      <div class="card" data-cat="desktop" style="--edge:#8A93A6">
+        <div class="card-slot">CARTRIDGE 08 · DESKTOP</div>
+        <div class="card-title">Events &amp; Venue Booking System</div>
+        <div class="card-desc">Conflict-free scheduling logic, venue availability checking, booking management, and admin controls for a desktop booking platform.</div>
+        <div class="tag-row"><span class="tag">Java</span><span class="tag">JavaFX</span><span class="tag">SQL Server</span></div>
+      </div>
+
+      <div class="card" data-cat="game" style="--edge:#E8A33D">
+        <div class="card-slot">CARTRIDGE 09 · GAME</div>
+        <div class="card-title">Multi-Game Console</div>
+        <div class="card-desc">A unified, menu-driven console hosting three arcade games — Snake, Hangman, and Wordle — sharing one OOP structure and lightweight SFML graphics.</div>
+        <div class="tag-row"><span class="tag">C++</span><span class="tag">SFML</span><span class="tag">OOP</span></div>
+      </div>
+
+      <div class="card" data-cat="game" style="--edge:#E8A33D">
+        <div class="card-slot">CARTRIDGE 10 · GAME</div>
+        <div class="card-title">2D Platformer Game</div>
+        <div class="card-desc">Cross-platform platformer with gravity physics, jump mechanics, platform collision, obstacles, and multi-level design.</div>
+        <div class="tag-row"><span class="tag">Unity</span><span class="tag">C#</span></div>
+      </div>
+
+      <div class="card" data-cat="game" style="--edge:#E8A33D">
+        <div class="card-slot">CARTRIDGE 11 · GAME</div>
+        <div class="card-title">Ball Game</div>
+        <div class="card-desc">A multi-level game where the goal is simple: get the ball from the start of the level to the end, cleanly.</div>
+        <div class="tag-row"><span class="tag">Unity</span><span class="tag">C#</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap reveal">
+    <span class="eyebrow">Inventory</span>
+    <h2 class="sec-title">Skills &amp; Tools</h2>
+    <p class="sec-intro">What's actually in the toolbox, grouped by what it's used for.</p>
+
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h4>Languages</h4>
+        <div class="pill-row">
+          <span class="pill">C</span><span class="pill">C++</span><span class="pill">C#</span>
+          <span class="pill">Java</span><span class="pill">Python</span><span class="pill">PHP</span>
+          <span class="pill">HTML</span><span class="pill">CSS</span><span class="pill">JavaScript</span>
+          <span class="pill">x86 Assembly</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Frameworks &amp; Libraries</h4>
+        <div class="pill-row">
+          <span class="pill">SFML</span><span class="pill">Java Swing</span><span class="pill">JavaFX</span>
+          <span class="pill">Streamlit</span><span class="pill">NumPy</span><span class="pill">Pandas</span>
+          <span class="pill">Scikit-learn</span><span class="pill">Matplotlib</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Databases</h4>
+        <div class="pill-row">
+          <span class="pill">SQL Server</span><span class="pill">MySQL (SSMS)</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h4>Developer Tools</h4>
+        <div class="pill-row">
+          <span class="pill">Git</span><span class="pill">GitHub</span><span class="pill">Docker</span>
+          <span class="pill">Visual Studio</span><span class="pill">VS Code</span><span class="pill">IntelliJ IDEA</span>
+          <span class="pill">Figma</span><span class="pill">draw.io</span><span class="pill">Unity</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="activities">
+  <div class="wrap reveal">
+    <span class="eyebrow">Side Quests</span>
+    <h2 class="sec-title">Activities &amp; Languages</h2>
+    <div class="act-grid">
+      <div class="act-card">
+        <span class="eyebrow">Community Service</span>
+        <p><strong>Volunteer Teacher — Karwan-e-Mudabir NGO.</strong> Taught underprivileged children, building communication, patience, and mentorship skills along the way.</p>
+      </div>
+      <div class="act-card">
+        <span class="eyebrow">Spoken Languages</span>
+        <p><strong>Urdu</strong> — Native<br><strong>English</strong> — Fluent</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap reveal">
+    <span class="eyebrow">Continue?</span>
+    <h2 class="contact-title">Let's build<br>something that runs.</h2>
+    <p class="sec-intro" style="margin-bottom:0;">Open to internships, collaborations, and anyone who wants to argue about scheduling algorithms.</p>
+
+    <div class="contact-links">
+      <a href="mailto:yasir.suhail01@gmail.com">✉ yasir.suhail01@gmail.com</a>
+      <a href="tel:+923251001343">☎ +92 325 1001343</a>
+      <a href="https://github.com/Muhammad-Yasir-Suhail" target="_blank" rel="noopener">↗ GitHub</a>
+      <a href="https://www.linkedin.com/in/muhammad-yasir-suhail804146407/" target="_blank" rel="noopener">↗ LinkedIn</a>
+    </div>
+
+    <div class="foot-bottom">
+      <span>MUHAMMAD YASIR SUHAIL — Dk-921-A, Dhok Paracha, Rawalpindi, Pakistan</span>
+      <span>BUILD 2026.07</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Typing effect
+  const typedTarget = document.getElementById('typedLine');
+  const fullText = "muhammad_yasir_suhail — game dev & systems programmer";
+  let i = 0;
+  function typeChar(){
+    if(i <= fullText.length){
+      typedTarget.textContent = fullText.slice(0, i);
+      typedTarget.classList.add('type-cursor');
+      i++;
+      setTimeout(typeChar, 28);
+    }
+  }
+  typeChar();
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el=>obs.observe(el));
+
+  // Project filters
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('#projGrid .card');
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      buttons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      cards.forEach(c=>{
+        const cats = c.dataset.cat.split(' ');
+        c.classList.toggle('hide', f !== 'all' && !cats.includes(f));
+      });
+    });
+  });
+
+  // Respect reduced motion
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    typedTarget.textContent = fullText;
+    revealEls.forEach(el=>el.classList.add('in'));
+  }
+</script>
+
+</body>
+</html>
